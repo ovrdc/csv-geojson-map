@@ -116,7 +116,6 @@
 		    joinedLayer = L.geoJson(null, {
 					style: {weight: 2, opacity: 0.8, color: 'white', fillColor: 'blue', fillOpacity: 0.3},
 					onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
-						var labelFIPS = "";
 		        var csvData;
 		        
 		        var geoJoinId = 'feature.properties.' + joinId;
@@ -165,6 +164,7 @@
 			    var omnivoreLayer = omnivore.geojson("layerUrl", null, joinedLayer);					
 				}
 		    omnivoreLayer.on('ready', function() {
+		      console.log('omnivore ready');
 		      joinedLayer.addTo(map);
 		    });
 		
