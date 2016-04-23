@@ -152,10 +152,18 @@
 		      } //end onEachFeature
 				}); //end layer defining. We still have to load the data into it!!
 			
-				var omnivoreLink = 'omnivore.' + layerGeomType;
-				
-		    var omnivoreLayer = omnivoreLink("layerUrl", null, joinedLayer);
-		
+				if (layerFileType === 'csv') {
+			    var omnivoreLayer = omnivore.csv("layerUrl", null, joinedLayer);					
+				}
+				if (layerFileType === 'topojson') {
+			    var omnivoreLayer = omnivore.topojson("layerUrl", null, joinedLayer);					
+				}
+				if (layerFileType === 'wkt') {
+			    var omnivoreLayer = omnivore.wkt("layerUrl", null, joinedLayer);					
+				}
+		    if (layerFileType === 'geojson') {
+			    var omnivoreLayer = omnivore.geojson("layerUrl", null, joinedLayer);					
+				}
 		    omnivoreLayer.on('ready', function() {
 		      joinedLayer.addTo(map);
 		    });
