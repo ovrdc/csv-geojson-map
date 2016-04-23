@@ -68,7 +68,7 @@
 	  </div>
 		<script>
 		
-    var osm, ortho, topo, gray, csv, omnivoreLayer;
+    var osm, ortho, topo, gray, csv, omnivoreLayer, joinedLayer;
     
     osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -189,7 +189,7 @@
 		}
 
     omnivoreLayer.on('ready', function() {
-      var joinedLayer = L.geoJson();
+      joinedLayer = L.geoJson();
       joinedLayer.addData(omnivoreLayer.toGeoJSON());
       console.log('omnivoreLayer ready');
       joinedLayer.eachLayer(function(layer) {
