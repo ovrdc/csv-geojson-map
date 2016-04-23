@@ -36,25 +36,66 @@
 	  </div>
 		<script>
 		
-		var map = new L.Map('map', {
-		   center: [39.0021,-83.0099],
-		   zoom: 9,
-		   zoomControl: false
-		 });
-		L.hash(map);
-		
-		var cartodb = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    var osm, ortho, topo, gray;
+    
+    osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+    
+    topo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
+      maxZoom: 20,
+      maxNativeZoom: 18,
+    });
+    
+    ortho = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+     });
+
+		var gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
 			subdomains: 'abcd'
 		}).addTo(map);
+     
+/////////////////////////////
+//----EDIT THIS SECTION----//
+/////////////////////////////
+    var center = [39.0021,-83.0099],
+      zoom = 9,
+      basemap = gray,
+      layerName = "ARC FY 2017",
+      layerUrl = "arc_topojson.json",
+      layerGeomType = "polygon",
+      layerFileType = "topojson",
+      csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
+      dropbox = true,
+      joinId = 'FIPS';
+/////////////////////////////
+//----STOP EDITING---------//
+/////////////////////////////
+
+		var map = new L.Map('map', {
+		   center: center,
+		   zoom: zoom,
+		   zoomControl: false
+		 });
+
+		var csv;
+
+		if (dropbox === true) {
+			csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
+		}else{
+			csv = csvUrl
+		}
 		
-		var arcGeom, arc;
 		
-		Papa.parse('https://dl.dropboxusercontent.com/s/39yehyefev6qtai/county-economic-status-fy2017.csv?dl=0', {
+		
+		Papa.parse(csv, {
 			download: true,
 			header: true,
 			complete: function(results) {
-		    arc = L.geoJson(null, {
+		    joinedLayer = L.geoJson(null, {
 					style: {weight: 2, opacity: 0.8, color: 'white', fillColor: 'blue', fillOpacity: 0.3},
 					onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
 						var labelFIPS = "";
@@ -91,12 +132,12 @@
 		    arcGeom = omnivore.topojson('arc_topojson.json', null, arc);
 		
 		    arcGeom.on('ready', function() {
-		      arc.addTo(map);
+		      joinedLayer.addTo(map);
 		      ovrdc.addTo(map);
 		      ovrdc.bringToFront();
 		    });
 		
-		    var layerControl = L.control.layers(null, {"ARC Status FY 2017": arc}, {collapsed: false}).addTo(map);
+		    var layerControl = L.control.layers(null, {layerName: joinedLayer}, {collapsed: false}).addTo(map);
 		
 			}	//Papa.parse's complete: section over
 		});	// Papa.parse function over.
