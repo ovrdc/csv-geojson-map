@@ -19,6 +19,9 @@
 	<!--Papa Parse CSV plugin-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
 	
+	<!--account.js-->
+	<script src="accounting.js"></script>
+	
 	<!--End Map CSS and JS-->
 	</head>
 	<body>
@@ -128,13 +131,13 @@
 					  }
 		      } //end onEachFeature
 				}); //end layer defining. We still have to load the data into it!!
+			
+				omnivoreLink = 'omnivore.' + fileGeomType + '("fileUrl", null, joinedLayer)';
+				
+		    omnivoreLayer = omnivoreLink;
 		
-		    arcGeom = omnivore.topojson('arc_topojson.json', null, arc);
-		
-		    arcGeom.on('ready', function() {
+		    omnivoreLayer.on('ready', function() {
 		      joinedLayer.addTo(map);
-		      ovrdc.addTo(map);
-		      ovrdc.bringToFront();
 		    });
 		
 		    var layerControl = L.control.layers(null, {layerName: joinedLayer}, {collapsed: false}).addTo(map);
