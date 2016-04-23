@@ -59,7 +59,7 @@
 	  </div>
 		<script>
 		
-    var osm, ortho, topo, gray, csv;
+    var osm, ortho, topo, gray, csv, omnivoreLayer;
     
     osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -87,8 +87,8 @@
     var center = [39.0021,-83.0099],
       zoom = 9,
       basemap = gray,
-      layerName = "ARC FY 2017",
-      layerUrl = "'data/arc_topojson.json'",
+      layerName = ["ARC FY 2017"],//need double quotes
+      layerUrl = ["data/arc_topojson.json"],
       layerGeomType = "polygon",
       layerFileType = "topojson",
       csvUrl = '',
@@ -106,6 +106,22 @@
 
 		basemap.addTo(map);
 
+		//Add geometry layer based on file type and extension
+		if (layerFileType === 'csv') {
+	    omnivoreLayer = omnivore.csv(layerUrl, null, joinedLayer);					
+		}
+		if (layerFileType === 'topojson') {
+	    omnivoreLayer = omnivore.topojson(layerUrl, null, joinedLayer);					
+		}
+		if (layerFileType === 'wkt') {
+	    omnivoreLayer = omnivore.wkt(layerUrl, null, joinedLayer);					
+		}
+    if (layerFileType === 'geojson') {
+	    omnivoreLayer = omnivore.geojson(layerUrl, null, joinedLayer);					
+		}
+
+
+		//Add csv layer, if one exists, and change dropbox url - this is not officially supported in the free version of dropbox
 		if (dropbox === true) {
 			csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
 		}else{
@@ -155,21 +171,9 @@
 						  }
 			      } //end onEachFeature
 					}); //end layer defining. We still have to load the data into it!!
-				
-					if (layerFileType === 'csv') {
-				    var omnivoreLayer = omnivore.csv(layerUrl, null, joinedLayer);					
-					}
-					if (layerFileType === 'topojson') {
-				    var omnivoreLayer = omnivore.topojson(layerUrl, null, joinedLayer);					
-					}
-					if (layerFileType === 'wkt') {
-				    var omnivoreLayer = omnivore.wkt(layerUrl, null, joinedLayer);					
-					}
-			    if (layerFileType === 'geojson') {
-				    var omnivoreLayer = omnivore.geojson(layerUrl, null, joinedLayer);					
-					}
+
 			    omnivoreLayer.on('ready', function() {
-			      console.log('omnivore ready');
+			      console.log('omnivoreLayer ready');
 			      joinedLayer.eachLayer(function(layer) {
 			      	var popup = "";
 							for (var k in layer.feature.properties) {
