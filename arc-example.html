@@ -89,6 +89,13 @@
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
 			subdomains: 'abcd'
 		});
+		
+		var baseLayers = {
+      "Streets": osm,
+      "Ortho": ortho,
+      "Topo": topo
+    };
+	
      
 /////////////////////////////
 //----EDIT THIS SECTION----//
@@ -204,7 +211,7 @@
    		var overlays = {
   	  	"Layer": joinedLayer,
 			};
-    	var layerControl = L.control.layers(null, overlays).addTo(map);
+    	var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
     });
 
 		</script>
