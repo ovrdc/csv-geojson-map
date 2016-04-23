@@ -190,7 +190,7 @@
 
     omnivoreLayer.on('ready', function() {
       var joinedLayer = L.geoJson();
-      joinedLayer.addData(omnivoreLayer);
+      joinedLayer.addData(omnivoreLayer.toGeoJSON());
       console.log('omnivoreLayer ready');
       joinedLayer.eachLayer(function(layer) {
       	var popup = "";
