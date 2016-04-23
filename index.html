@@ -81,48 +81,11 @@
 
 
 
-<!-- Esri Leaflet Core -->
-<script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
-<!--ESRI Geocoder -->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/leaflet.esri.geocoder/1.0.2/esri-leaflet-geocoder.css" />
-<script src="//cdn.jsdelivr.net/leaflet.esri.geocoder/1.0.2/esri-leaflet-geocoder.js"></script>
-<!--script src="https://www.ovrdc.org/apps/assets/cssjs/google.js"></script-->
-<script src="https://www.ovrdc.org/apps/assets/cssjs/google.js"></script>
-<script src="https://www.ovrdc.org/apps/assets/cssjs/gglegrey.js"></script>
-<!--marker cluster -->
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
-<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-
-
-<!--Leaflet fullscreen attached to the zoom control -->
-<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/Control.FullScreen.css" />
-<script src="https://www.ovrdc.org/apps/assets/cssjs/Control.FullScreen.js"></script>
-<!--OVRDC Custom Styles-->
-<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/ovrdc-css/ovrdc-style.css" />
-
-<!--End Leaflet Plugins-->
 <!--Papa Parse CSV plugin-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
-<!--fonts-->
-<link href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Archivo+Black' rel='stylesheet' type='text/css'>
-
-
-
-<script src="https://www.ovrdc.org/apps/assets/cssjs/accountingjs/accounting.js"></script>
-
-
-
 <!--End Map CSS and JS-->
-
-
-<!--end plugins-->
 </head>
-<style>*{font-family: "Open Sans", sans-serif;}</style>
 <body>
-
-<style>.leaflet-control-layers{border-radius: 2px;}</style>
 <div id="map">
 	<div class="legend" style="font-size:larger;">
     <h5><strong>ARC County Status</strong></h5>
@@ -147,45 +110,9 @@ var cartodb = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/li
 	subdomains: 'abcd'
 }).addTo(map);
 
-var arc2016 = L.esri.featureLayer({
-  url: "//services.arcgis.com/nkunl3y8FDxPkXDl/arcgis/rest/services/arcfy2016/FeatureServer/2",
-  simplifyFactor: 0.5,
-  style: function(feature) {
-    if(feature.properties.STATUS2016 === 'transitional'){
-      return {color: 'grey', weight: 2 };
-    } else if(feature.properties.STATUS2016 === 'distressed'){
-      return { color: 'red', weight: 2 };
-    } else if (feature.properties.STATUS2016 === 'at-risk') {
-      return { color: 'orange', weight: 2 };
-    } else if (feature.properties.STATUS2016 === 'competitive') {
-        return {color: 'deepskyblue', weight: 2};
-    } else {
-        return {color: 'blue', weight: 2};
-    }
-  },
-  opacity: 1,
-  fillOpacity: 0.5,
-  attribution: "ARC 2015",
-});
-
-
-arc2016.bindPopup(function(feature){
-  return L.Util.template('<b>{COUNTY}</b><br>{STATUS2016}<br>Match Rate: {MATCH_RATE}', feature.properties)
-});
-
-var ovrdc = L.geoJson.ajax('https://www.ovrdc.org/apps/assets/data/ovrdcboundary.geojson', {
-  style: {
-      color: 'white',
-      weight: 5,
-      fillOpacity: 0,
-      opacity: 1,
-    },
-  clickable: false,
-});
-
 var arcGeom, arc;
 
-Papa.parse('assets/data/county-economic-status-fy2017.csv', {
+Papa.parse('https://dl.dropboxusercontent.com/s/39yehyefev6qtai/county-economic-status-fy2017.csv?dl=0', {
 	download: true,
 	header: true,
 	complete: function(results) {
