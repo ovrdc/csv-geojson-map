@@ -201,10 +201,12 @@
 				layer.bindPopup(popup);
       });
       joinedLayer.addTo(map);
+   		var overlays = {
+  	  	"Layer": joinedLayer,
+			};
+    	var layerControl = L.control.layers(null, overlays).addTo(map);
     });
 
-    var layerControl = L.control.layers(null, {"Layer", joinedLayer}).addTo(map);
-	
 		</script>
 	</body>
 	<footer>
