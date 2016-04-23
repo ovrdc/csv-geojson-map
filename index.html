@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CSV GeoJson App</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<!--fonts and jquery-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!--Font Awesome CDN-->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+
+<!--Begin Map CSS and JS-->
+<!--leaflet-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+<!--Location Plugin-->
+<script src='https://cdn.jsdelivr.net/leaflet.locatecontrol/0.49.0/L.Control.Locate.min.js'></script>
+<link href='https://cdn.jsdelivr.net/leaflet.locatecontrol/0.49.0/L.Control.Locate.css' rel='stylesheet' />
+<!--Home Button ie Default Extent-->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/leaflet.defaultextent.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet.defaultextent.js"></script>
+<!--Easy Print Plugin Does not work well -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/easy-print/easyPrint.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/easy-print/leaflet.easyPrint.js"></script>
+<!--script src="https://www.ovrdc.org/apps/assets/cssjs/jQuery.print.js"></script-->
+<!--locate control from source -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/L.Control.Locate.min.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/L.Control.Locate.min.js"></script>
+<!--Awesome Marker Plugin -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/leaflet.awesome-markers.css">
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet.awesome-markers.js"></script>
+<!--Leaflet Hash via Mapbox CDN-->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+<!--Google Custom Map -->
+<script src="https://maps.google.com/maps/api/js?v=3"></script>
+<!-- Mapzen/Pelias geocoding plugin-->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/mapzen-search/pelias-leaflet-geocoder.css">
+<script src="https://www.ovrdc.org/apps/assets/cssjs/mapzen-search/pelias-leaflet-geocoder.js"></script>
+<!-- Leaflet Omnivore Plugin GeoJson KML Etc -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+<!-- leaflet measure -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/leaflet.measure.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet.measure.js"></script>
+<!-- leaflet ajax geojson loader -->
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet.ajax.min.js"></script>
+<!-- leaflet panel layers right side panel -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/leaflet-panel-layers.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet-panel-layers.js"></script>
+
+<!-- leaflet search -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/leaflet-search/leaflet-search.min.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet-search/leaflet-search.src.js"></script>
+
+<!--minimap-->
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-minimap/v1.0.0/Control.MiniMap.css' rel='stylesheet' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-minimap/v1.0.0/Control.MiniMap.js'></script>
+<!--leaflet label via mapbox-->
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+<!--leaflet providers simplify adding tiled basemaps -->
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet-providers.js"></script>
+<!-- Leaflet Easy button Updated Dec 2015-->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/easy-button/easy-button.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/easy-button/easy-button.js"></script>
+<!--Leaflet sidebar v1 aka menu -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/L.Control.Sidebar.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/L.Control.Sidebar.js"></script>
+<!-- leaflet loading and leaflet-spin works with leaflet ajax and map tiles -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/Control.Loading.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/Control.Loading.js"></script>
+<script src="https://www.ovrdc.org/apps/assets/cssjs/spin.js"></script>
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet.spin.js"></script>
+<!--leaflet navbar home forward back buttons-->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/Leaflet.NavBar.css"/>
+<script src="https://www.ovrdc.org/apps/assets/cssjs/Leaflet.NavBar.js"></script>
+<!--Maki Markers from Mapbox-->
+<script src="https://www.ovrdc.org/apps/assets/cssjs/leaflet.makimarkers.js"></script>
+
+
+
+
+
+<!-- Esri Leaflet Core -->
+<script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
+<!--ESRI Geocoder -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/leaflet.esri.geocoder/1.0.2/esri-leaflet-geocoder.css" />
+<script src="//cdn.jsdelivr.net/leaflet.esri.geocoder/1.0.2/esri-leaflet-geocoder.js"></script>
+<!--script src="https://www.ovrdc.org/apps/assets/cssjs/google.js"></script-->
+<script src="https://www.ovrdc.org/apps/assets/cssjs/google.js"></script>
+<script src="https://www.ovrdc.org/apps/assets/cssjs/gglegrey.js"></script>
+<!--marker cluster -->
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+
+
+<!--Leaflet fullscreen attached to the zoom control -->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/cssjs/Control.FullScreen.css" />
+<script src="https://www.ovrdc.org/apps/assets/cssjs/Control.FullScreen.js"></script>
+<!--OVRDC Custom Styles-->
+<link rel="stylesheet" href="https://www.ovrdc.org/apps/assets/ovrdc-css/ovrdc-style.css" />
+
+<!--End Leaflet Plugins-->
+<!--Papa Parse CSV plugin-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+<!--fonts-->
+<link href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Archivo+Black' rel='stylesheet' type='text/css'>
+
+
+
+<script src="https://www.ovrdc.org/apps/assets/cssjs/accountingjs/accounting.js"></script>
+
+
+
+<!--End Map CSS and JS-->
+
+
+<!--end plugins-->
+</head>
+<style>*{font-family: "Open Sans", sans-serif;}</style>
+<body>
+
+<style>.leaflet-control-layers{border-radius: 2px;}</style>
+<div id="map">
+	<div class="legend" style="font-size:larger;">
+    <h5><strong>ARC County Status</strong></h5>
+    <ul class='fa-ul'>
+    	<li><i class="fa-li fa fa-stop "style="color:red"></i>Distressed</li>
+    	<li><i class="fa-li fa fa-stop "style="color:orange"></i>At-Risk</<li>
+    	<li><i class="fa-li fa fa-stop "style="color:gray"></i>Transitional</li>
+    	<li><i class="fa-li fa fa-stop "style="color:deepskyblue"></i>Competitive</li>
+    	<li><i class="fa-li fa fa-stop "style="color:blue"></i>Attainment</li>
+    </ul>
+  </div>
+<script>
+var map = new L.Map('map', {
+   center: [39.0021,-83.0099],
+   zoom: 9,
+   zoomControl: false
+ });
+L.hash(map);
+
+var cartodb = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+	subdomains: 'abcd'
+}).addTo(map);
+
+var arc2016 = L.esri.featureLayer({
+  url: "//services.arcgis.com/nkunl3y8FDxPkXDl/arcgis/rest/services/arcfy2016/FeatureServer/2",
+  simplifyFactor: 0.5,
+  style: function(feature) {
+    if(feature.properties.STATUS2016 === 'transitional'){
+      return {color: 'grey', weight: 2 };
+    } else if(feature.properties.STATUS2016 === 'distressed'){
+      return { color: 'red', weight: 2 };
+    } else if (feature.properties.STATUS2016 === 'at-risk') {
+      return { color: 'orange', weight: 2 };
+    } else if (feature.properties.STATUS2016 === 'competitive') {
+        return {color: 'deepskyblue', weight: 2};
+    } else {
+        return {color: 'blue', weight: 2};
+    }
+  },
+  opacity: 1,
+  fillOpacity: 0.5,
+  attribution: "ARC 2015",
+});
+
+
+arc2016.bindPopup(function(feature){
+  return L.Util.template('<b>{COUNTY}</b><br>{STATUS2016}<br>Match Rate: {MATCH_RATE}', feature.properties)
+});
+
+var ovrdc = L.geoJson.ajax('https://www.ovrdc.org/apps/assets/data/ovrdcboundary.geojson', {
+  style: {
+      color: 'white',
+      weight: 5,
+      fillOpacity: 0,
+      opacity: 1,
+    },
+  clickable: false,
+});
+
+var arcGeom, arc;
+
+Papa.parse('assets/data/county-economic-status-fy2017.csv', {
+	download: true,
+	header: true,
+	complete: function(results) {
+    arc = L.geoJson(null, {
+			style: {weight: 2, opacity: 0.8, color: 'white', fillColor: 'blue', fillOpacity: 0.3},
+			onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
+				var labelFIPS = "";
+        var csvData;
+				if (feature.properties.FIPS) {
+					//Here it comes! The part where we look up the CSV data for a row having the same name as the map item's name
+					labelFIPS = feature.properties.FIPS.toString();
+          var props = feature.properties;
+					csvData = results.data.filter(function(data){return data.FIPS == this;}, labelFIPS);
+          //console.log(csvData);
+          var income = accounting.formatMoney(csvData[0]['pcmi2014'], {precision: 0});
+          layer.bindPopup(csvData[0]['County'] + ' County, ' + props.State + '<br /><strong>' + csvData[0]['status17'] + '</strong><table class="table table-condensed" style="margin-top:20px;"><tr><td>Per Capita Income 2014: </td><td class="text-right">' + income + '</td></tr><tr><td>Poverty Rate (2010-2014): </td><td class="text-right">' + csvData[0]['pov10_14'] + '</tr></td><tr><td>Unemployment Rate (2012-2014): </td><td class="text-right">' + csvData[0]["unemp_12_14"] + '</td></tr></table>');
+          var color = "";
+          if (csvData[0].status17 === 'Distressed') {
+            color = 'red';
+          }
+          if (csvData[0].status17 === 'At-Risk') {
+            color = 'darkorange';
+          }
+          if (csvData[0].status17 === 'Transitional') {
+            color = 'gray';
+          }
+          if (csvData[0].status17 === 'Competitive') {
+            color = 'deepskyblue';
+          }
+          if (color != "") {
+            layer.setStyle({fillColor: color, color: color});
+          }
+			  }
+      } //end onEachFeature
+		}); //end layer defining. We still have to load the data into it!!
+
+    arcGeom = omnivore.topojson('assets/data/arc_counties_2015_min_fields_topojson_simple20.json', null, arc);
+
+    arcGeom.on('ready', function() {
+      arc.addTo(map);
+      ovrdc.addTo(map);
+      ovrdc.bringToFront();
+    });
+
+    var layerControl = L.control.layers(null, {"ARC Status FY 2017": arc, "ARC Status FY 2016": arc2016}, {collapsed: false}).addTo(map);
+
+	}	//Papa.parse's complete: section over
+});	// Papa.parse function over.
+
+map.on('layeradd', function() {
+  if (map.hasLayer(ovrdc)){
+    ovrdc.bringToFront()
+  }
+});
+
+</script>
+
+
+</body>
+<footer>
+</footer>
+</html>
