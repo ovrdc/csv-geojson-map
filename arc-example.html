@@ -123,23 +123,19 @@
 
 		basemap.addTo(map);
 
-/*		//Add geometry layer based on file type and extension
-		if (layerFileType === 'csv') {
-	    omnivoreLayer = omnivore.csv(layerUrl, null, joinedLayer);					
-		}
-		if (layerFileType === 'topojson') {
-	    omnivoreLayer = omnivore.topojson(layerUrl, null, joinedLayer);					
-		}
-		if (layerFileType === 'wkt') {
-	    omnivoreLayer = omnivore.wkt(layerUrl, null, joinedLayer);					
-		}
-    if (layerFileType === 'geojson') {
-	    omnivoreLayer = omnivore.geojson(layerUrl, null, joinedLayer);					
-		}*/
-
-	  if (layerFileType === 'topojson') {
+		//Add geometry layer based on file type and extension
+	if (layerFileType === 'csv') {
+	    omnivoreLayer = omnivore.csv(layerUrl[0]));					
+	}
+	if (layerFileType === 'topojson') {
 	    omnivoreLayer = omnivore.topojson(layerUrl[0]);					
-		}
+	}
+	if (layerFileType === 'wkt') {
+	    omnivoreLayer = omnivore.wkt(layerUrl[0]);					
+	}
+    	if (layerFileType === 'geojson') {
+	    omnivoreLayer = omnivore.geojson(layerUrl[0]);					
+	}
 
 		//Add csv layer, if one exists, and change dropbox url - this is not officially supported in the free version of dropbox
 		if (dropbox === true) {
