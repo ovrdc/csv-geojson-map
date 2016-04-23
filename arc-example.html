@@ -184,21 +184,6 @@
 			      } //end onEachFeature
 					}); //end layer defining. We still have to load the data into it!!
 
-			    omnivoreLayer.on('ready', function() {
-			      console.log('omnivoreLayer ready');
-			      joinedLayer.eachLayer(function(layer) {
-			      	var popup = "";
-							for (var k in layer.feature.properties) {
-							  var v = String(layer.feature.properties[k]);
-							  popup += '<b>' + k + '</b><br>' + v + '<br>' + '<hr style="margin:5px 0px;">';
-							};
-							layer.bindPopup(popup);
-			      });
-			      joinedLayer.addTo(map);
-			    });
-			
-			    var layerControl = L.control.layers(null, {Layer: joinedLayer}, {collapsed: false}).addTo(map);
-			
 				}	//Papa.parse's complete: section over
 			});	// Papa.parse function over.
 		}else{
@@ -206,6 +191,23 @@
 			omnivore.topojson(layerUrl[0]).addTo(map);
 		}
 
+    omnivoreLayer.on('ready', function() {
+      var joinedLayer = L.geoJson();
+      joinedLayer.addData(omnivoreLayer);
+      console.log('omnivoreLayer ready');
+      joinedLayer.eachLayer(function(layer) {
+      	var popup = "";
+				for (var k in layer.feature.properties) {
+				  var v = String(layer.feature.properties[k]);
+				  popup += '<b>' + k + '</b><br>' + v + '<br>' + '<hr style="margin:5px 0px;">';
+				};
+				layer.bindPopup(popup);
+      });
+      joinedLayer.addTo(map);
+    });
+
+    var layerControl = L.control.layers(null, {Layer: joinedLayer}, {collapsed: false}).addTo(map);
+	
 		</script>
 	</body>
 	<footer>
