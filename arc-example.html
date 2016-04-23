@@ -76,10 +76,10 @@
 	     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
      });
 
-		var gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-			subdomains: 'abcd'
-		});
+	var gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+		subdomains: 'abcd'
+	});
      
 /////////////////////////////
 //----EDIT THIS SECTION----//
@@ -178,7 +178,7 @@
 		      joinedLayer.addTo(map);
 		    });
 		
-		    var layerControl = L.control.layers(null, {'"' + layerName + '"': joinedLayer}, {collapsed: false}).addTo(map);
+		    var layerControl = L.control.layers(null, {layerName[0]: joinedLayer}, {collapsed: false}).addTo(map);
 		
 			}	//Papa.parse's complete: section over
 		});	// Papa.parse function over.
