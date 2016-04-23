@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>CSV GeoJson App</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	
+	<!--Font Awesome CDN-->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+	
+	<!--leaflet-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+
+	<!-- Leaflet Omnivore Plugin GeoJson KML Etc -->
+	<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+	
+	<!--Papa Parse CSV plugin-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+	
+	<!--End Map CSS and JS-->
+	</head>
+	<body>
+	<div id="map">
+		<!--legend easy way-->
+		<div class="legend" style="font-size:larger;">
+	    <h5><strong>ARC County Status</strong></h5>
+	    <ul class='fa-ul'>
+	    	<li><i class="fa-li fa fa-stop "style="color:red"></i>Distressed</li>
+	    	<li><i class="fa-li fa fa-stop "style="color:orange"></i>At-Risk</<li>
+	    	<li><i class="fa-li fa fa-stop "style="color:gray"></i>Transitional</li>
+	    	<li><i class="fa-li fa fa-stop "style="color:deepskyblue"></i>Competitive</li>
+	    	<li><i class="fa-li fa fa-stop "style="color:blue"></i>Attainment</li>
+	    </ul>
+	  </div>
+		<script>
+		
+		var map = new L.Map('map', {
+		   center: [39.0021,-83.0099],
+		   zoom: 9,
+		   zoomControl: false
+		 });
+		L.hash(map);
+		
+		var cartodb = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+			subdomains: 'abcd'
+		}).addTo(map);
+		
+		var arcGeom, arc;
+		
+		Papa.parse('https://dl.dropboxusercontent.com/s/39yehyefev6qtai/county-economic-status-fy2017.csv?dl=0', {
+			download: true,
+			header: true,
+			complete: function(results) {
+		    arc = L.geoJson(null, {
+					style: {weight: 2, opacity: 0.8, color: 'white', fillColor: 'blue', fillOpacity: 0.3},
+					onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
+						var labelFIPS = "";
+		        var csvData;
+						if (feature.properties.FIPS) {
+							
+							//Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
+							labelFIPS = feature.properties.FIPS.toString();
+		          var props = feature.properties;
+							csvData = results.data.filter(function(data){return data.FIPS == this;}, labelFIPS);
+		          //console.log(csvData);
+		          var income = accounting.formatMoney(csvData[0]['pcmi2014'], {precision: 0});
+		          layer.bindPopup(csvData[0]['County'] + ' County, ' + props.State + '<br /><strong>' + csvData[0]['status17'] + '</strong><table class="table table-condensed" style="margin-top:20px;"><tr><td>Per Capita Income 2014: </td><td class="text-right">' + income + '</td></tr><tr><td>Poverty Rate (2010-2014): </td><td class="text-right">' + csvData[0]['pov10_14'] + '</tr></td><tr><td>Unemployment Rate (2012-2014): </td><td class="text-right">' + csvData[0]["unemp_12_14"] + '</td></tr></table>');
+		          var color = "";
+		          if (csvData[0].status17 === 'Distressed') {
+		            color = 'red';
+		          }
+		          if (csvData[0].status17 === 'At-Risk') {
+		            color = 'darkorange';
+		          }
+		          if (csvData[0].status17 === 'Transitional') {
+		            color = 'gray';
+		          }
+		          if (csvData[0].status17 === 'Competitive') {
+		            color = 'deepskyblue';
+		          }
+		          if (color != "") {
+		            layer.setStyle({fillColor: color, color: color});
+		          }
+					  }
+		      } //end onEachFeature
+				}); //end layer defining. We still have to load the data into it!!
+		
+		    arcGeom = omnivore.topojson('arc_topojson.json', null, arc);
+		
+		    arcGeom.on('ready', function() {
+		      arc.addTo(map);
+		      ovrdc.addTo(map);
+		      ovrdc.bringToFront();
+		    });
+		
+		    var layerControl = L.control.layers(null, {"ARC Status FY 2017": arc}, {collapsed: false}).addTo(map);
+		
+			}	//Papa.parse's complete: section over
+		});	// Papa.parse function over.
+
+		</script>
+	</body>
+	<footer>
+	</footer>
+</html>
