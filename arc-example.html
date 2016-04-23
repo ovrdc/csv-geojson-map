@@ -76,10 +76,10 @@
 	     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
      });
 
-	var gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-		subdomains: 'abcd'
-	});
+		gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+			subdomains: 'abcd'
+		});
      
 /////////////////////////////
 //----EDIT THIS SECTION----//
@@ -91,7 +91,7 @@
       layerUrl = "data/arc_topojson.json",
       layerGeomType = "polygon",
       layerFileType = "topojson",
-      csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
+      //csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
       dropbox = true,
       joinId = 'FIPS';
 /////////////////////////////
@@ -111,77 +111,82 @@
 			csv = csvUrl
 		}
 		
-		Papa.parse(csv, {
-			download: true,
-			header: true,
-			complete: function(results) {
-		    joinedLayer = L.geoJson(null, {
-					style: {weight: 2, opacity: 0.8, color: 'white', fillColor: 'blue', fillOpacity: 0.3},
-					onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
-		        var csvData;
-		        
-		        var geoJoinId = 'feature.properties.' + joinId;
-		        
-						if (geoJoinId) {
-							
-							//Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-							geoJoinIdString = geoJoinId.toString();
-		          var props = feature.properties;
-		         
-							csvData = results.data.filter(function(data){return data.joinId == this;}, geoJoinId);
-		          //console.log(csvData);
-		          /*
-		          var income = accounting.formatMoney(csvData[0]['pcmi2014'], {precision: 0});
-		          layer.bindPopup(csvData[0]['County'] + ' County, ' + props.State + '<br /><strong>' + csvData[0]['status17'] + '</strong><table class="table table-condensed" style="margin-top:20px;"><tr><td>Per Capita Income 2014: </td><td class="text-right">' + income + '</td></tr><tr><td>Poverty Rate (2010-2014): </td><td class="text-right">' + csvData[0]['pov10_14'] + '</tr></td><tr><td>Unemployment Rate (2012-2014): </td><td class="text-right">' + csvData[0]["unemp_12_14"] + '</td></tr></table>');
-		          var color = "";
-		          if (csvData[0].status17 === 'Distressed') {
-		            color = 'red';
-		          }
-		          if (csvData[0].status17 === 'At-Risk') {
-		            color = 'darkorange';
-		          }
-		          if (csvData[0].status17 === 'Transitional') {
-		            color = 'gray';
-		          }
-		          if (csvData[0].status17 === 'Competitive') {
-		            color = 'deepskyblue';
-		          }
-		          if (color != "") {
-		            layer.setStyle({fillColor: color, color: color});
-		          }*/
-					  }
-		      } //end onEachFeature
-				}); //end layer defining. We still have to load the data into it!!
+		if (csvUrl) {
 			
-				if (layerFileType === 'csv') {
-			    var omnivoreLayer = omnivore.csv(layerUrl, null, joinedLayer);					
-				}
-				if (layerFileType === 'topojson') {
-			    var omnivoreLayer = omnivore.topojson(layerUrl, null, joinedLayer);					
-				}
-				if (layerFileType === 'wkt') {
-			    var omnivoreLayer = omnivore.wkt(layerUrl, null, joinedLayer);					
-				}
-		    if (layerFileType === 'geojson') {
-			    var omnivoreLayer = omnivore.geojson(layerUrl, null, joinedLayer);					
-				}
-		    omnivoreLayer.on('ready', function() {
-		      console.log('omnivore ready');
-		      joinedLayer.eachLayer(function(layer) {
-		      	var popup = "";
-						for (var k in layer.feature.properties) {
-						  var v = String(layer.feature.properties[k]);
-						  popup += '<b>' + k + '</b><br>' + v + '<br>' + '<hr style="margin:5px 0px;">';
-						};
-						layer.bindPopup(popup);
-		      });
-		      joinedLayer.addTo(map);
-		    });
-		
-		    var layerControl = L.control.layers(null, {Layer: joinedLayer}, {collapsed: false}).addTo(map);
-		
-			}	//Papa.parse's complete: section over
-		});	// Papa.parse function over.
+			Papa.parse(csv, {
+				download: true,
+				header: true,
+				complete: function(results) {
+			    joinedLayer = L.geoJson(null, {
+						style: {weight: 2, opacity: 0.8, color: 'white', fillColor: 'blue', fillOpacity: 0.3},
+						onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
+			        var csvData;
+			        
+			        var geoJoinId = 'feature.properties.' + joinId;
+			        
+							if (geoJoinId) {
+								
+								//Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
+								geoJoinIdString = geoJoinId.toString();
+			          var props = feature.properties;
+			         
+								csvData = results.data.filter(function(data){return data.joinId == this;}, geoJoinId);
+			          //console.log(csvData);
+			          /*
+			          var income = accounting.formatMoney(csvData[0]['pcmi2014'], {precision: 0});
+			          layer.bindPopup(csvData[0]['County'] + ' County, ' + props.State + '<br /><strong>' + csvData[0]['status17'] + '</strong><table class="table table-condensed" style="margin-top:20px;"><tr><td>Per Capita Income 2014: </td><td class="text-right">' + income + '</td></tr><tr><td>Poverty Rate (2010-2014): </td><td class="text-right">' + csvData[0]['pov10_14'] + '</tr></td><tr><td>Unemployment Rate (2012-2014): </td><td class="text-right">' + csvData[0]["unemp_12_14"] + '</td></tr></table>');
+			          var color = "";
+			          if (csvData[0].status17 === 'Distressed') {
+			            color = 'red';
+			          }
+			          if (csvData[0].status17 === 'At-Risk') {
+			            color = 'darkorange';
+			          }
+			          if (csvData[0].status17 === 'Transitional') {
+			            color = 'gray';
+			          }
+			          if (csvData[0].status17 === 'Competitive') {
+			            color = 'deepskyblue';
+			          }
+			          if (color != "") {
+			            layer.setStyle({fillColor: color, color: color});
+			          }*/
+						  }
+			      } //end onEachFeature
+					}); //end layer defining. We still have to load the data into it!!
+				
+					if (layerFileType === 'csv') {
+				    var omnivoreLayer = omnivore.csv(layerUrl, null, joinedLayer);					
+					}
+					if (layerFileType === 'topojson') {
+				    var omnivoreLayer = omnivore.topojson(layerUrl, null, joinedLayer);					
+					}
+					if (layerFileType === 'wkt') {
+				    var omnivoreLayer = omnivore.wkt(layerUrl, null, joinedLayer);					
+					}
+			    if (layerFileType === 'geojson') {
+				    var omnivoreLayer = omnivore.geojson(layerUrl, null, joinedLayer);					
+					}
+			    omnivoreLayer.on('ready', function() {
+			      console.log('omnivore ready');
+			      joinedLayer.eachLayer(function(layer) {
+			      	var popup = "";
+							for (var k in layer.feature.properties) {
+							  var v = String(layer.feature.properties[k]);
+							  popup += '<b>' + k + '</b><br>' + v + '<br>' + '<hr style="margin:5px 0px;">';
+							};
+							layer.bindPopup(popup);
+			      });
+			      joinedLayer.addTo(map);
+			    });
+			
+			    var layerControl = L.control.layers(null, {Layer: joinedLayer}, {collapsed: false}).addTo(map);
+			
+				}	//Papa.parse's complete: section over
+			});	// Papa.parse function over.
+		}else{
+			omnivore.geojson(layerUrl).addTo(map);
+		}
 
 		</script>
 	</body>
