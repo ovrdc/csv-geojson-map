@@ -125,7 +125,7 @@
 
 		//Add geometry layer based on file type and extension
 	if (layerFileType === 'csv') {
-	    omnivoreLayer = omnivore.csv(layerUrl[0]));					
+	    omnivoreLayer = omnivore.csv(layerUrl[0]);					
 	}
 	if (layerFileType === 'topojson') {
 	    omnivoreLayer = omnivore.topojson(layerUrl[0]);					
@@ -205,11 +205,12 @@
 				layer.bindPopup(popup);
       });
       joinedLayer.addTo(map);
-   		var overlays = {
-  	  	"Layer": joinedLayer,
-			};
+      map.fitBounds(joinedLayer.getBounds());
+      var overlays = {
+    	"Layer": joinedLayer,
+      };
     	var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-    });
+   });
 
 		</script>
 	</body>
