@@ -129,8 +129,8 @@
 	    omnivoreLayer = omnivore.geojson(layerUrl, null, joinedLayer);					
 		}*/
 
-	  if (layerFileType === 'geojson') {
-	    omnivoreLayer = omnivore.geojson(layerUrl);					
+	  if (layerFileType === 'topojson') {
+	    omnivoreLayer = omnivore.topojson(layerUrl[0]);					
 		}
 
 		//Add csv layer, if one exists, and change dropbox url - this is not officially supported in the free version of dropbox
@@ -186,9 +186,6 @@
 
 				}	//Papa.parse's complete: section over
 			});	// Papa.parse function over.
-		}else{
-			console.log(layerUrl);
-			omnivore.topojson(layerUrl[0]).addTo(map);
 		}
 
     omnivoreLayer.on('ready', function() {
