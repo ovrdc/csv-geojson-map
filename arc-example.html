@@ -152,9 +152,9 @@
 		      } //end onEachFeature
 				}); //end layer defining. We still have to load the data into it!!
 			
-				omnivoreLink = 'omnivore.' + layerGeomType + '("layerUrl", null, joinedLayer)';
+				omnivoreLink = 'omnivore.' + layerGeomType;
 				
-		    omnivoreLayer = omnivoreLink;
+		    omnivoreLayer = omnivoreLink("layerUrl", null, joinedLayer);
 		
 		    omnivoreLayer.on('ready', function() {
 		      joinedLayer.addTo(map);
