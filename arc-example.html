@@ -20,7 +20,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
 	
 	<!--account.js-->
-	<script src="accounting.js"></script>
+	<script src="js/accounting.js"></script>
 	
 	<!--End Map CSS and JS-->
 	</head>
@@ -39,7 +39,7 @@
 	  </div>
 		<script>
 		
-    var osm, ortho, topo, gray;
+    var osm, ortho, topo, gray, csv;
     
     osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -68,7 +68,7 @@
       zoom = 9,
       basemap = gray,
       layerName = "ARC FY 2017",
-      layerUrl = "arc_topojson.json",
+      layerUrl = "data/arc_topojson.json",
       layerGeomType = "polygon",
       layerFileType = "topojson",
       csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
@@ -81,18 +81,13 @@
 		var map = new L.Map('map', {
 		   center: center,
 		   zoom: zoom,
-		   zoomControl: false
 		 });
-
-		var csv;
 
 		if (dropbox === true) {
 			csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
 		}else{
 			csv = csvUrl
 		}
-		
-		
 		
 		Papa.parse(csv, {
 			download: true,
@@ -103,13 +98,18 @@
 					onEachFeature: function(feature, layer) { //below code will be executed for each item in the layer
 						var labelFIPS = "";
 		        var csvData;
-						if (feature.properties.FIPS) {
+		        
+		        var geoJoinId = 'feature.properties.' + joinId;
+		        
+						if (geoJoinId) {
 							
 							//Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-							labelFIPS = feature.properties.FIPS.toString();
+							geoJoinIdString = geoJoinId.toString();
 		          var props = feature.properties;
-							csvData = results.data.filter(function(data){return data.FIPS == this;}, labelFIPS);
+		         
+							csvData = results.data.filter(function(data){return data.joinId == this;}, geoJoinId);
 		          //console.log(csvData);
+		          /*
 		          var income = accounting.formatMoney(csvData[0]['pcmi2014'], {precision: 0});
 		          layer.bindPopup(csvData[0]['County'] + ' County, ' + props.State + '<br /><strong>' + csvData[0]['status17'] + '</strong><table class="table table-condensed" style="margin-top:20px;"><tr><td>Per Capita Income 2014: </td><td class="text-right">' + income + '</td></tr><tr><td>Poverty Rate (2010-2014): </td><td class="text-right">' + csvData[0]['pov10_14'] + '</tr></td><tr><td>Unemployment Rate (2012-2014): </td><td class="text-right">' + csvData[0]["unemp_12_14"] + '</td></tr></table>');
 		          var color = "";
@@ -127,7 +127,7 @@
 		          }
 		          if (color != "") {
 		            layer.setStyle({fillColor: color, color: color});
-		          }
+		          }*/
 					  }
 		      } //end onEachFeature
 				}); //end layer defining. We still have to load the data into it!!
