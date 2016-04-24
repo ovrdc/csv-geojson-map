@@ -210,6 +210,8 @@
 
         omnivoreLayer.on('ready', function() {
 
+          map.fitBounds(joinedLayer.getBounds());
+
           Papa.parse(csv, {
             download: true,
             header: true,
