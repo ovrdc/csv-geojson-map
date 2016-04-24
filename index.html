@@ -131,7 +131,7 @@
           var v = String(layer.feature.properties[k]);
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
         };
-        layer.bindPopup(popup).setLatLng(layer.getCenter()).openPopup();
+        layer.bindPopup(popup).setLatLng(layer.getLatLng()).openPopup();
       };
 
       function updatePopup(feaure, layer) {
@@ -146,10 +146,7 @@
           });
         });
         layer.on('popupclose', function() {
-          layer.setStyle({
-            weight: 3,
-            color: 'white',
-          });
+          layer.setStyle(style);
         });
       };
 
