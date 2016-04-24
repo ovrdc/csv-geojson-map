@@ -125,6 +125,7 @@
 
       function buildPopup(e) {
         var layer = e.target;
+        joinedLayer.setStyle(style);
         var popupCenter = e.latlng;
         console.log(popupCenter);
         console.log(layer);
@@ -138,7 +139,11 @@
           .setLatLng(popupCenter)
           .openOn(map);
 //        layer.bindPopup(popup).openPopup();
-        
+        layer.setStyle({
+          weight: 5,
+          color: 'goldenrod',
+          opacity: 1,
+        });
       };
 
       function updatePopup(feaure, layer) {
