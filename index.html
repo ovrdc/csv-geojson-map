@@ -142,7 +142,11 @@
       }
 
       omnivoreLayer.on('ready', function() {
-        joinedLayer = L.geoJson();
+        joinedLayer = L.geoJson(null, {
+          style: {
+            color: 'white',
+            fillColor: 'cornflowerblue'
+          });
         joinedLayer.addData(omnivoreLayer.toGeoJSON());
         console.log('omnivoreLayer ready');
         joinedLayer.eachLayer(function(layer) {
@@ -159,7 +163,7 @@
             });
           });
           layer.on('popupclose', function() {
-            layer.setStyle({weight: 3, color: white,})
+            layer.setStyle({weight: 3, color: 'white',})
           })
         });
         joinedLayer.addTo(map);
