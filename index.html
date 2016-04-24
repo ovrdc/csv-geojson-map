@@ -154,8 +154,7 @@
 
     joinedLayer = L.geoJson(null, {
       style: style,
-      onEachFeature: updateinfo
-      },
+      onEachFeature: updateinfo,
     }).addTo(map);
 
     function joinFunction(fProps, csvTable, joinKey) {
