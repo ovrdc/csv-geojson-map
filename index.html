@@ -167,7 +167,9 @@
         onEachFeature: updatePopup
       }).addTo(map);
 
-      var layerControl = new L.control.layers(basemaps, null).addTo(map);
+      var overlays = {"layer": joinedLayer};
+
+      var layerControl = new L.control.layers(baseLayers, overalys).addTo(map);
 
       function joinFunction(fProps, csvTable, joinKey) {
         var keyVal = fProps[joinKey];
