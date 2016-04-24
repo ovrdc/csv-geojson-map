@@ -113,7 +113,7 @@
       });
 
       basemap.addTo(map);
-
+      
       var style = {
         weight: 2, //could turn these into variables
         fillOpacity: 0.7, //could turn these into variables
@@ -166,6 +166,8 @@
         style: style,
         onEachFeature: updatePopup
       }).addTo(map);
+
+      var layerControl = new L.control.layers(basemaps, null).addTo(map);
 
       function joinFunction(fProps, csvTable, joinKey) {
         var keyVal = fProps[joinKey];
