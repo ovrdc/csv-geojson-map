@@ -96,6 +96,7 @@
         layerFileType = "topojson", //filetype ie csv, geojson, topojson
         layerColor = "white", //outside color
         layerFillColor = "cornflowerblue", //fill color
+        join = true,
         //csvUrl = '',
         csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
         dropbox = true,
@@ -111,33 +112,14 @@
 
       basemap.addTo(map);
 
-      //Add geometry layer based on file type and extension
-      if (layerFileType === 'csv') {
-        omnivoreLayer = omnivore.csv(layerUrl[0]);
-      }
-      if (layerFileType === 'topojson') {
-        omnivoreLayer = omnivore.topojson(layerUrl[0]);
-      }
-      if (layerFileType === 'wkt') {
-        omnivoreLayer = omnivore.wkt(layerUrl[0]);
-      }
-      if (layerFileType === 'geojson') {
-        omnivoreLayer = omnivore.geojson(layerUrl[0]);
-      }
+      var style = {
+        weight: 2, //could turn these into variables
+        fillOpacity: 0.7, //could turn these into variables
+        color: layerColor,
+        fillColor: layerFillColor,
+      };
 
-      omnivoreLayer.on('ready', function() {
-        joinedLayer = L.geoJson(null, {
-          style: {
-            weight: 2, //could turn these into variables
-            fillOpacity: 0.7, //could turn these into variables
-            color: layerColor,
-            fillColor: layerFillColor,
-          }
-        });
-        joinedLayer.addData(omnivoreLayer.toGeoJSON());
-        console.log('omnivoreLayer ready');
-        var popup = "";
-
+      if (join === true) {
         //Change dropbox url - this is not officially supported in the free version of dropbox
         if (dropbox === true) {
           csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
@@ -145,75 +127,64 @@
           csv = csvUrl
         }
 
-        //If a csv is listed it will be joined to the layerUrl based on the joinId
-        if (csvUrl) {
+        Papa.parse(csv, {
+              download: true,
+              header: true,
+              complete: function(results) {
+                joinedLayer = L.geoJson(null, { //below code will be executed for each item in the layer
+                      style: style,
+                      onEachFeature: function(feature, layer) {
 
-          Papa.parse(csv, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
-                    console.log(layer.feature.properties.FIPS);
-                    var csvData;
+                        var csvData;
 
-                    var geoJoinId = 'layer[0].feature.properties.' + joinId;
+                        var geoJoinId = 'feature.properties.' + joinId;
 
-                    if (joinId) {
+                        //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
+                        geoJoinIdString = geoJoinId.toString();
 
-                      //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-                      geoJoinIdString = geoJoinId.toString();
+                        csvData = results.data.filter(function(data) {
+                          return data.joinId == this;
+                        }, geoJoinId);
 
-                      csvData = results.data.filter(function(data) {
-                        return data.joinId == this;
-                      }, geoJoinId);
+                        for (var k in feature.properties) {
+                          var v = String(feature.properties[k]);
+                          popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
+                        };
 
-                      for (var k in layer[0].feature.properties) {
-                        var v = String(layer[0].feature.properties[k]);
-                        popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
-                      };
-
-                      layer.bindPopup(popup);
-                      layer.on('popupopen', function() {
-                        layer.setStyle({
-                          weight: 5,
-                          color: 'goldenrod',
-                          opacity: 1,
+                        layer.bindPopup(popup);
+                        layer.on('popupopen', function() {
+                          layer.setStyle({
+                            weight: 5,
+                            color: 'goldenrod',
+                            opacity: 1,
+                          });
                         });
-                      });
-                      layer.on('popupclose', function() {
-                        layer.setStyle({
-                          weight: 3,
-                          color: 'white',
+                        layer.on('popupclose', function() {
+                          layer.setStyle({
+                            weight: 3,
+                            color: 'white',
+                          })
                         })
-                      })
-                    };
-                  }) //end eachLayer
-              } //Papa.parse's complete: section over
-          }); // Papa.parse function over.
-        } else {
-          joinedLayer.eachLayer(function(layer) {
-            for (var k in feature.properties) {
-              var v = String(feature.properties[k]);
-              popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
-            };
+                      }) //end eachLayer
 
-            layer.bindPopup(popup);
-            layer.on('popupopen', function() {
-              layer.setStyle({
-                weight: 5,
-                color: 'goldenrod',
-                opacity: 1,
+                    //Add geometry layer based on file type and extension
+                    if (layerFileType === 'csv') {
+                      omnivoreLayer = omnivore.csv(layerUrl[0], null, joinedLayer);
+                    }
+                    if (layerFileType === 'topojson') {
+                      omnivoreLayer = omnivore.topojson(layerUrl[0], null, joinedLayer);
+                    }
+                    if (layerFileType === 'wkt') {
+                      omnivoreLayer = omnivore.wkt(layerUrl[0], null, joinedLayer);
+                    }
+                    if (layerFileType === 'geojson') {
+                      omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
+                    }
+                  } //Papa.parse's complete: section over
               });
-            });
-            layer.on('popupclose', function() {
-              layer.setStyle({
-                weight: 3,
-                color: 'white',
-              })
-            })
-          }); //end eachLayer
-        }
-        joinedLayer.addTo(map);
+          } // Papa.parse function over.
+      }
+      omnivoreLayer.on('ready', function() {
         map.fitBounds(joinedLayer.getBounds());
         var overlays = {
           layer: joinedLayer,
