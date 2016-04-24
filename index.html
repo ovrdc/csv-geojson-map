@@ -138,15 +138,15 @@
           .setContent(popup)
           .setLatLng(popupCenter)
           .openOn(map);
-//        layer.bindPopup(popup).openPopup();
         layer.setStyle({
           weight: 5,
           color: 'goldenrod',
           opacity: 1,
         });
+        layer.bringToFront();
       };
 
-      function updatePopup(feaure, layer) {
+/*      function updatePopup(feaure, layer) {
         layer.on({
           click: buildPopup
         });
@@ -160,7 +160,7 @@
         layer.on('popupclose', function() {
           layer.setStyle(style);
         });
-      };
+      };*/
 
       joinedLayer = L.geoJson(null, {
         style: style,
