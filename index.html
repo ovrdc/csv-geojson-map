@@ -160,41 +160,41 @@
           layer: joinedLayer,
         };
         var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
+
+              //Change dropbox url - this is not officially supported in the free version of dropbox
+              if (dropbox === true) {
+                csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
+              } else {
+                csv = csvUrl
+              }
+
+              //If a csv is listed it will be joined to the layerUrl based on the joinId
+              if (csvUrl) {
+
+                Papa.parse(csv, {
+                  download: true,
+                  header: true,
+                  complete: function(results) {
+                      joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
+                          var csvData;
+
+                          var geoJoinId = 'layer.feature.properties.' + joinId;
+
+                          if (joinId) {
+
+                            //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
+                            geoJoinIdString = geoJoinId.toString();
+                            var props = layer.feature.properties;
+
+                            csvData = results.data.filter(function(data) {
+                              return data.joinId == this;
+                            }, geoJoinId);
+                          }
+                        }) //end eachLayer
+                    } //Papa.parse's complete: section over
+                }); // Papa.parse function over.
+              }
       });
-
-      //Change dropbox url - this is not officially supported in the free version of dropbox
-      if (dropbox === true) {
-        csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
-      } else {
-        csv = csvUrl
-      }
-
-      //If a csv is listed it will be joined to the layerUrl based on the joinId
-      if (csvUrl) {
-
-        Papa.parse(csv, {
-          download: true,
-          header: true,
-          complete: function(results) {
-              joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
-                  var csvData;
-
-                  var geoJoinId = 'layer.feature.properties.' + joinId;
-
-                  if (joinId) {
-
-                    //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-                    geoJoinIdString = geoJoinId.toString();
-                    var props = layer.feature.properties;
-
-                    csvData = results.data.filter(function(data) {
-                      return data.joinId == this;
-                    }, geoJoinId);
-                  }
-                }) //end eachLayer
-            } //Papa.parse's complete: section over
-        }); // Papa.parse function over.
-      }
     </script>
 </body>
 <footer>
