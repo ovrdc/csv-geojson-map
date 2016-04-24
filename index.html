@@ -180,16 +180,16 @@
                     if (layerFileType === 'geojson') {
                       omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
                     }
+                    omnivoreLayer.on('ready', function() {
+                      map.fitBounds(joinedLayer.getBounds());
+                      var overlays = {
+                        layer: joinedLayer,
+                      };
+                      var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
+                    });
                   }//Papa.parse's complete: section over
           }) // Papa.parse function over.
       }
-      omnivoreLayer.on('ready', function() {
-        map.fitBounds(joinedLayer.getBounds());
-        var overlays = {
-          layer: joinedLayer,
-        };
-        var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-      });
     </script>
 </body>
 <footer>
