@@ -173,7 +173,7 @@
 
       omnivoreLayer.on('ready', function () {
 
-        Papa.parse(csvUrl, {
+        Papa.parse(csv, {
           download: true,
           header: true,
           complete: function(results) {
