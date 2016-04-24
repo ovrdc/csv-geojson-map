@@ -123,28 +123,39 @@
 
     var popup;
 
-    joinedLayer = L.geoJson(null, {
-      style: style,
-      onEachFeature: function(feature, layer) {
-        for (var k in layer.feature.properties) {
-          var v = String(layer.feature.properties[k]);
-          popup += '<strong>' + k + '</strong>: ' + v + '<br /><br />';
-        };
-        layer.bindPopup(popup);
-        layer.on('popupopen', function() {
+    function info(e) {
+      var layer = e.target;
+      popup = "";
+      for (var k in layer.feature.properties) {
+        var v = String(layer.feature.properties[k]);
+        popup += '<strong>' + k + '</strong><br>' + v + '<br /><br />';
+      };
+    };
+    
+    function updateinfo(feaure, layer) {
+      layer.on({
+        click: info,
+        mouseover: info
+      });
+      layer.on('popupopen', function() {
           layer.setStyle({
             weight: 5,
             color: 'goldenrod',
             opacity: 1,
           });
         });
-        layer.on('popupclose', function() {
-          layer.setStyle({
-            weight: 3,
-            color: 'white',
-          });
+      layer.on('popupclose', function() {
+        layer.setStyle({
+          weight: 3,
+          color: 'white',
         });
-      }
+      });
+    };
+
+    joinedLayer = L.geoJson(null, {
+      style: style,
+      onEachFeature: updateinfo
+      },
     }).addTo(map);
 
     function joinFunction(fProps, csvTable, joinKey) {
