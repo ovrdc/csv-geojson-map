@@ -181,6 +181,7 @@
                       omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
                     }
                     omnivoreLayer.on('ready', function() {
+                      joinedLayer.addTo(map);
                       map.fitBounds(joinedLayer.getBounds());
                       var overlays = {
                         layer: joinedLayer,
