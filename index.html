@@ -53,146 +53,154 @@
 <body>
   <div id="map">
     <script>
-      var osm, ortho, topo, gray, csv, omnivoreLayer, joinedLayer;
+    var start = performance.now()
+    //gloabl variables
+    var osm, ortho, topo, gray, csv, omnivoreLayer, joinedLayer;
 
-      //Basemaps all served over ssl
-      osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      });
+    //Basemaps all served over ssl
+    osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
 
-      topo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-        maxZoom: 20,
-        maxNativeZoom: 18,
-      });
+    topo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
+      maxZoom: 20,
+      maxNativeZoom: 18,
+    });
 
-      ortho = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-      });
+    ortho = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
 
-      gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-        subdomains: 'abcd'
-      });
+    gray = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+      subdomains: 'abcd'
+    });
 
-      var baseLayers = {
-        "Streets": osm,
-        "Ortho": ortho,
-        "Topo": topo,
-        "Grayscale": gray,
-      };
+    var baseLayers = {
+      "Streets": osm,
+      "Ortho": ortho,
+      "Topo": topo,
+      "Grayscale": gray,
+    };
 
 
-      /////////////////////////////
-      //----EDIT THIS SECTION----//
-      /////////////////////////////
-      var center = [39.0021, -83.0099],
-        zoom = 9, //initial zoom level
-        basemap = gray, //basemap on load
-        layerName = "ARC FY 2017", //this does nothing, need to figure out how to get this into the layer control
-        layerUrl = ["data/arc_topojson.json"], //the geometry layer
-        layerGeomType = "polygon", //geometry type
-        layerFileType = "topojson", //filetype ie csv, geojson, topojson
-        layerColor = "white", //outside color
-        layerFillColor = "cornflowerblue", //fill color
-        join = true,
-        //csvUrl = '',
-        csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
-        dropbox = true,
-        joinId = 'FIPS';
-      /////////////////////////////
-      //----STOP EDITING---------//
-      /////////////////////////////
+    /////////////////////////////
+    //----EDIT THIS SECTION----//
+    /////////////////////////////
+    var center = [39.0021, -83.0099],
+      zoom = 9, //initial zoom level
+      basemap = gray, //basemap on load
+      layerName = "ARC FY 2017", //this does nothing, need to figure out how to get this into the layer control
+      layerUrl = ["data/arc_topojson.json"], //the geometry layer
+      layerGeomType = "polygon", //geometry type
+      layerFileType = "topojson", //filetype ie csv, geojson, topojson
+      layerColor = "white", //outside color
+      layerFillColor = "cornflowerblue", //fill color
+      join = true,
+      //csvUrl = '',
+      csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
+      dropbox = true,
+      joinId = 'FIPS';
+    /////////////////////////////
+    //----STOP EDITING---------//
+    /////////////////////////////
 
-      var map = new L.Map('map', {
-        center: center,
-        zoom: zoom,
-      });
+    var map = new L.Map('map', {
+      center: center,
+      zoom: zoom,
+    });
 
-      basemap.addTo(map);
+    basemap.addTo(map);
 
-      var style = {
-        weight: 2, //could turn these into variables
-        fillOpacity: 0.7, //could turn these into variables
-        color: layerColor,
-        fillColor: layerFillColor,
-      };
+    var style = {
+      weight: 2, //could turn these into variables
+      fillOpacity: 0.7, //could turn these into variables
+      color: layerColor,
+      fillColor: layerFillColor,
+    };
 
-      var popup;
+    var popup;
 
-      if (join === true) {
-        //Change dropbox url - this is not officially supported in the free version of dropbox
-        if (dropbox === true) {
-          csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
-        } else {
-          csv = csvUrl
-        }
-
-        Papa.parse(csv, {
-              download: true,
-              header: true,
-              complete: function(results) {
-                joinedLayer = L.geoJson(null, { //below code will be executed for each item in the layer
-                      style: style,
-                      onEachFeature: function(feature, layer) {
-
-                        var csvData;
-
-                        var geoJoinId = 'feature.properties.' + joinId;
-
-                        //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-                        geoJoinIdString = geoJoinId.toString();
-
-                        csvData = results.data.filter(function(data) {
-                          return data.joinId == this;
-                        }, geoJoinId);
-
-                        for (var k in csvData[0].properties) {
-                          var v = String(csvData[0].properties[k]);
-                          popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
-                        };
-
-                        layer.bindPopup(popup);
-                        layer.on('popupopen', function() {
-                          layer.setStyle({
-                            weight: 5,
-                            color: 'goldenrod',
-                            opacity: 1,
-                          });
-                        });
-                        layer.on('popupclose', function() {
-                          layer.setStyle({
-                            weight: 3,
-                            color: 'white',
-                          })
-                        })
-                      }//end eachLayer
-                    });
-                    //Add geometry layer based on file type and extension
-                    if (layerFileType === 'csv') {
-                      omnivoreLayer = omnivore.csv(layerUrl[0], null, joinedLayer);
-                    }
-                    if (layerFileType === 'topojson') {
-                      omnivoreLayer = omnivore.topojson(layerUrl[0], null, joinedLayer);
-                    }
-                    if (layerFileType === 'wkt') {
-                      omnivoreLayer = omnivore.wkt(layerUrl[0], null, joinedLayer);
-                    }
-                    if (layerFileType === 'geojson') {
-                      omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
-                    }
-                    omnivoreLayer.on('ready', function() {
-                      joinedLayer.addTo(map);
-                      map.fitBounds(joinedLayer.getBounds());
-                      var overlays = {
-                        layer: joinedLayer,
-                      };
-                      var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-                    });
-                  }//Papa.parse's complete: section over
-          }) // Papa.parse function over.
+    joinedLayer = L.geoJson(null, {
+      style: style,
+      onEachFeature: function(feature, layer) {
+        for (var k in layer.feature.properties) {
+          var v = String(layer.feature.properties[k]);
+          popup += '<strong>' + k + '</strong>: ' + v + '<br /><br />';
+        };
+        layer.bindPopup(popup);
       }
+    }).addTo(map);
+
+    function joinFunction(fProps, csvTable, joinKey) {
+      var keyVal = fProps[joinKey];
+      var match = {};
+      for (var i = 0; i < csvTable.length; i++) {
+        if (csvTable[i][joinKey] === keyVal) {
+          match = csvTable[i];
+          for (key in match) {
+            if (!(key in fProps)) {
+              fProps[key] = match[key];
+            }
+          }
+        }
+      }
+    }
+
+    if (join === true) {
+      //Change dropbox url - this is not officially supported in the free version of dropbox
+      if (dropbox === true) {
+        csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
+      } else {
+        csv = csvUrl
+      }
+
+      //Add geometry layer based on file type and extension
+      if (layerFileType === 'csv') {
+        omnivoreLayer = omnivore.csv(layerUrl[0], null, joinedLayer);
+      }
+      if (layerFileType === 'topojson') {
+        omnivoreLayer = omnivore.topojson(layerUrl[0], null, joinedLayer);
+      }
+      if (layerFileType === 'wkt') {
+        omnivoreLayer = omnivore.wkt(layerUrl[0], null, joinedLayer);
+      }
+      if (layerFileType === 'geojson') {
+        omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
+      }
+
+      omnivoreLayer.on('ready', function () {
+
+        Papa.parse('assets/data/wellston_zone_codes.csv', {
+          download: true,
+          header: true,
+          complete: function(results) {
+            //New join function from stack exchange
+            joinedLayer.eachLayer(function(layer) {
+              joinFunction(layer.feature.properties, results.data, joinId);
+            });
+            var now = performance.now();
+            csvjoined = now - start;
+            console.log('csv loaded in ' + csvjoined);
+            layer.on('popupopen', function() {
+              layer.setStyle({
+                weight: 5,
+                color: 'goldenrod',
+                opacity: 1,
+              });
+            });
+            layer.on('popupclose', function() {
+              layer.setStyle({
+                weight: 3,
+                color: 'white',
+              })
+            })
+          }//end complete
+        });//end prase
+      });//end on ready
+    }//end if
     </script>
 </body>
 <footer>
