@@ -125,27 +125,11 @@
         omnivoreLayer = omnivore.geojson(layerUrl[0]);
       }
 
-      //mouse interactions highlight on click
-      function highlightFeature(e) {
-  			var layer = e.target;
-
-  			layer.setStyle({
-  				weight: 5,
-  				color: '#666',
-  			});
-
-  			if (!L.Browser.ie && !L.Browser.opera) {
-  				layer.bringToFront();
-  			}
-  		}
-
-      function resetHighlight(e) {
-        joinedLayer.resetStyle(e.target);
-      }
-
       omnivoreLayer.on('ready', function() {
         joinedLayer = L.geoJson(null, {
           style: {
+            weight: 2,//could turn these into variables
+            fillOpacity: 0.7,//could turn these into variables
             color: layerColor,
             fillColor: layerFillColor,
           }
@@ -162,7 +146,7 @@
           layer.on('popupopen', function() {
             layer.setStyle({
               weight: 5,
-              color: '#666',
+              color: 'goldenrod',
             });
           });
           layer.on('popupclose', function() {
