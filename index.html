@@ -131,6 +131,19 @@
           popup += '<strong>' + k + '</strong>: ' + v + '<br /><br />';
         };
         layer.bindPopup(popup);
+        layer.on('popupopen', function() {
+          layer.setStyle({
+            weight: 5,
+            color: 'goldenrod',
+            opacity: 1,
+          });
+        });
+        layer.on('popupclose', function() {
+          layer.setStyle({
+            weight: 3,
+            color: 'white',
+          });
+        });
       }
     }).addTo(map);
 
@@ -184,19 +197,6 @@
             var now = performance.now();
             csvjoined = now - start;
             console.log('csv loaded in ' + csvjoined);
-            layer.on('popupopen', function() {
-              layer.setStyle({
-                weight: 5,
-                color: 'goldenrod',
-                opacity: 1,
-              });
-            });
-            layer.on('popupclose', function() {
-              layer.setStyle({
-                weight: 3,
-                color: 'white',
-              })
-            })
           }//end complete
         });//end prase
       });//end on ready
