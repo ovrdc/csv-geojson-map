@@ -165,8 +165,8 @@
                             color: 'white',
                           })
                         })
-                      }) //end eachLayer
-
+                      }//end eachLayer
+                    });
                     //Add geometry layer based on file type and extension
                     if (layerFileType === 'csv') {
                       omnivoreLayer = omnivore.csv(layerUrl[0], null, joinedLayer);
@@ -180,9 +180,8 @@
                     if (layerFileType === 'geojson') {
                       omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
                     }
-                  } //Papa.parse's complete: section over
-              });
-          } // Papa.parse function over.
+                  }//Papa.parse's complete: section over
+          }) // Papa.parse function over.
       }
       omnivoreLayer.on('ready', function() {
         map.fitBounds(joinedLayer.getBounds());
