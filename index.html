@@ -146,11 +146,11 @@
         layer.bringToFront();
       };
 
-/*      function updatePopup(feaure, layer) {
+      function updatePopup(feaure, layer) {
         layer.on({
           click: buildPopup
         });
-        layer.on('popupopen', function() {
+        /*layer.on('popupopen', function() {
           layer.setStyle({
             weight: 5,
             color: 'goldenrod',
@@ -159,8 +159,8 @@
         });
         layer.on('popupclose', function() {
           layer.setStyle(style);
-        });
-      };*/
+        });*/
+      };
 
       joinedLayer = L.geoJson(null, {
         style: style,
