@@ -125,6 +125,7 @@
 
     function info(e) {
       var layer = e.target;
+      console.log(layer);
       popup = "";
       for (var k in layer.feature.properties) {
         var v = String(layer.feature.properties[k]);
@@ -153,7 +154,24 @@
 
     joinedLayer = L.geoJson(null, {
       style: style,
-      onEachFeature: updateinfo,
+      onEachFeature: function (feaure, layer) {
+        layer.on({
+          click: info
+        });
+        layer.on('popupopen', function() {
+            layer.setStyle({
+              weight: 5,
+              color: 'goldenrod',
+              opacity: 1,
+            });
+          });
+        layer.on('popupclose', function() {
+          layer.setStyle({
+            weight: 3,
+            color: 'white',
+          });
+        });
+      },
     }).addTo(map);
 
     function joinFunction(fProps, csvTable, joinKey) {
