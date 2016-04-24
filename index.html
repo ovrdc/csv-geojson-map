@@ -133,7 +133,12 @@
           var v = String(layer.feature.properties[k]);
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
         };
-        layer.bindPopup(popup).setLatLng(popupCenter).openPopup();
+        var layerPopup = new L.popup()
+          .setContent(popup)
+          .setLatLng(popupCenter)
+          .openOn(map);
+//        layer.bindPopup(popup).openPopup();
+        
       };
 
       function updatePopup(feaure, layer) {
