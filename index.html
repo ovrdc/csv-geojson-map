@@ -88,14 +88,14 @@
       //----EDIT THIS SECTION----//
       /////////////////////////////
       var center = [39.0021, -83.0099],
-        zoom = 9,//initial zoom level
-        basemap = gray,//basemap on load
-        layerName = "ARC FY 2017",//this does nothing, need to figure out how to get this into the layer control
-        layerUrl = ["data/arc_topojson.json"],//the geometry layer
-        layerGeomType = "polygon",//geometry type
-        layerFileType = "topojson",//filetype ie csv, geojson, topojson
-        layerColor = "white",//outside color
-        layerFillColor = "cornflowerblue",//fill color
+        zoom = 9, //initial zoom level
+        basemap = gray, //basemap on load
+        layerName = "ARC FY 2017", //this does nothing, need to figure out how to get this into the layer control
+        layerUrl = ["data/arc_topojson.json"], //the geometry layer
+        layerGeomType = "polygon", //geometry type
+        layerFileType = "topojson", //filetype ie csv, geojson, topojson
+        layerColor = "white", //outside color
+        layerFillColor = "cornflowerblue", //fill color
         //csvUrl = '',
         csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
         dropbox = true,
@@ -128,14 +128,48 @@
       omnivoreLayer.on('ready', function() {
         joinedLayer = L.geoJson(null, {
           style: {
-            weight: 2,//could turn these into variables
-            fillOpacity: 0.7,//could turn these into variables
+            weight: 2, //could turn these into variables
+            fillOpacity: 0.7, //could turn these into variables
             color: layerColor,
             fillColor: layerFillColor,
           }
         });
         joinedLayer.addData(omnivoreLayer.toGeoJSON());
         console.log('omnivoreLayer ready');
+
+        //Change dropbox url - this is not officially supported in the free version of dropbox
+        if (dropbox === true) {
+          csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
+        } else {
+          csv = csvUrl
+        }
+
+        //If a csv is listed it will be joined to the layerUrl based on the joinId
+        if (csvUrl) {
+
+          Papa.parse(csv, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
+                    var csvData;
+
+                    var geoJoinId = 'layer.feature.properties.' + joinId;
+
+                    if (joinId) {
+
+                      //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
+                      geoJoinIdString = geoJoinId.toString();
+                      var props = layer.feature.properties;
+
+                      csvData = results.data.filter(function(data) {
+                        return data.joinId == this;
+                      }, geoJoinId);
+                    }
+                  }) //end eachLayer
+              } //Papa.parse's complete: section over
+          }); // Papa.parse function over.
+        }
         joinedLayer.eachLayer(function(layer) {
           var popup = "";
           for (var k in layer.feature.properties) {
@@ -151,7 +185,10 @@
             });
           });
           layer.on('popupclose', function() {
-            layer.setStyle({weight: 3, color: 'white',})
+            layer.setStyle({
+              weight: 3,
+              color: 'white',
+            })
           })
         });
         joinedLayer.addTo(map);
@@ -160,40 +197,6 @@
           layer: joinedLayer,
         };
         var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-
-              //Change dropbox url - this is not officially supported in the free version of dropbox
-              if (dropbox === true) {
-                csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
-              } else {
-                csv = csvUrl
-              }
-
-              //If a csv is listed it will be joined to the layerUrl based on the joinId
-              if (csvUrl) {
-
-                Papa.parse(csv, {
-                  download: true,
-                  header: true,
-                  complete: function(results) {
-                      joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
-                          var csvData;
-
-                          var geoJoinId = 'layer.feature.properties.' + joinId;
-
-                          if (joinId) {
-
-                            //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-                            geoJoinIdString = geoJoinId.toString();
-                            var props = layer.feature.properties;
-
-                            csvData = results.data.filter(function(data) {
-                              return data.joinId == this;
-                            }, geoJoinId);
-                          }
-                        }) //end eachLayer
-                    } //Papa.parse's complete: section over
-                }); // Papa.parse function over.
-              }
       });
     </script>
 </body>
