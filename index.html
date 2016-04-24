@@ -123,6 +123,24 @@
         omnivoreLayer = omnivore.geojson(layerUrl[0]);
       }
 
+      //mouse interactions highlight on click
+      function highlightFeature(e) {
+  			var layer = e.target;
+
+  			layer.setStyle({
+  				weight: 5,
+  				color: '#666',
+  			});
+
+  			if (!L.Browser.ie && !L.Browser.opera) {
+  				layer.bringToFront();
+  			}
+  		}
+
+      function resetHighlight(e) {
+        joinedLayer.resetStyle(e.target);
+      }
+
       omnivoreLayer.on('ready', function() {
         joinedLayer = L.geoJson();
         joinedLayer.addData(omnivoreLayer.toGeoJSON());
@@ -134,6 +152,15 @@
             popup += '<b>' + k + '</b><br>' + v + '<br>' + '<hr style="margin:5px 0px;">';
           };
           layer.bindPopup(popup);
+          layer.on('popupopen', function() {
+            layer.setStyle({
+              weight: 5,
+              color: '#666',
+            });
+          });
+          layer.on('popupclose', function() {
+            layer.setStyle({weight: 3, color: white,})
+          })
         });
         joinedLayer.addTo(map);
         map.fitBounds(joinedLayer.getBounds());
