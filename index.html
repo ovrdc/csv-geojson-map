@@ -125,7 +125,9 @@
 
       function buildPopup(e) {
         var layer = e.target;
+        var center4popup = layer.getCenter();
         console.log(layer);
+        console.log(center4popup);
         popup = "";
         for (var k in layer.feature.properties) {
           var v = String(layer.feature.properties[k]);
