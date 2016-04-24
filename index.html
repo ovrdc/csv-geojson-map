@@ -140,7 +140,7 @@
           var popup = "";
           for (var k in layer.feature.properties) {
             var v = String(layer.feature.properties[k]);
-            popup += '<strong>' + k + '</strong>: <span style="float:right;>"' + v + '</span><br /><br />';
+            popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
           };
           layer.bindPopup(popup);
           layer.on('popupopen', function() {
