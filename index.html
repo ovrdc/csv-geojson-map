@@ -94,6 +94,8 @@
         layerUrl = ["data/arc_topojson.json"],
         layerGeomType = "polygon",
         layerFileType = "topojson",
+        layerColor: "white",
+        layerFillColor: "cornflowerblue",
         csvUrl = '',
         //csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
         dropbox = false,
@@ -144,9 +146,10 @@
       omnivoreLayer.on('ready', function() {
         joinedLayer = L.geoJson(null, {
           style: {
-            color: 'white',
-            fillColor: 'cornflowerblue'
-          });
+            color: layerColor,
+            fillColor: layerFillColor,
+          }
+        });
         joinedLayer.addData(omnivoreLayer.toGeoJSON());
         console.log('omnivoreLayer ready');
         joinedLayer.eachLayer(function(layer) {
