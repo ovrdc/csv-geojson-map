@@ -88,8 +88,8 @@
       //----EDIT THIS SECTION----//
       /////////////////////////////
       var center = [39.0021, -83.0099],
-        zoom = 9,
-        basemap = gray,
+        zoom = 9,//initial zoom level
+        basemap = gray,//basemap on load
         layerName = ["ARC FY 2017"], //need double quotes
         layerUrl = ["data/arc_topojson.json"],
         layerGeomType = "polygon",
@@ -156,7 +156,7 @@
         joinedLayer.addTo(map);
         map.fitBounds(joinedLayer.getBounds());
         var overlays = {
-          "Layer": joinedLayer,
+          layerName[0]: joinedLayer,
         };
         var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
       });
