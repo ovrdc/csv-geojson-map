@@ -153,23 +153,22 @@
             header: true,
             complete: function(results) {
                 joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
-                    console.log(e.layer);
+                    console.log(layer.feature.properties.FIPS);
                     var csvData;
 
-                    var geoJoinId = 'e.feature.properties.' + joinId;
+                    var geoJoinId = 'layer.feature.properties.' + joinId;
 
                     if (joinId) {
 
                       //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
                       geoJoinIdString = geoJoinId.toString();
-                      var props = e.feature.properties;
 
                       csvData = results.data.filter(function(data) {
                         return data.joinId == this;
                       }, geoJoinId);
 
-                      for (var k in e.feature.properties) {
-                        var v = String(e.feature.properties[k]);
+                      for (var k in layer.feature.properties) {
+                        var v = String(layer.feature.properties[k]);
                         popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
                       };
 
