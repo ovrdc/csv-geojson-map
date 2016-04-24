@@ -173,7 +173,7 @@
 
       omnivoreLayer.on('ready', function () {
 
-        Papa.parse('assets/data/wellston_zone_codes.csv', {
+        Papa.parse(csvUrl, {
           download: true,
           header: true,
           complete: function(results) {
