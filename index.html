@@ -131,6 +131,7 @@
         var v = String(layer.feature.properties[k]);
         popup += '<strong>' + k + '</strong><br>' + v + '<br /><br />';
       };
+      layer.bindPopup(popup);
     };
     
     function updateinfo(feaure, layer) {
