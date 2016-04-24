@@ -148,8 +148,8 @@
                           return data.joinId == this;
                         }, geoJoinId);
 
-                        for (var k in feature.properties) {
-                          var v = String(feature.properties[k]);
+                        for (var k in csvData[0].properties) {
+                          var v = String(csvData[0].properties[k]);
                           popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
                         };
 
