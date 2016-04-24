@@ -157,24 +157,22 @@
           download: true,
           header: true,
           complete: function(results) {
-                joinedLayer.eachLayer(function(layer){//below code will be executed for each item in the layer
-                    var csvData;
+              joinedLayer.eachLayer(function(layer) { //below code will be executed for each item in the layer
+                  var csvData;
 
-                    var geoJoinId = 'layer.feature.properties.' + joinId;
+                  var geoJoinId = 'layer.feature.properties.' + joinId;
 
-                    if (joinId) {
+                  if (joinId) {
 
-                      //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
-                      geoJoinIdString = geoJoinId.toString();
-                      var props = layer.feature.properties;
+                    //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
+                    geoJoinIdString = geoJoinId.toString();
+                    var props = layer.feature.properties;
 
-                      csvData = results.data.filter(function(data) {
-                        return data.joinId == this;
-                      }, geoJoinId);
-                    }
-                  } //end eachLayer
-              });//end joinedLayer
-
+                    csvData = results.data.filter(function(data) {
+                      return data.joinId == this;
+                    }, geoJoinId);
+                  }
+                }) //end eachLayer
             } //Papa.parse's complete: section over
         }); // Papa.parse function over.
       }
