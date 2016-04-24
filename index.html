@@ -90,15 +90,15 @@
       var center = [39.0021, -83.0099],
         zoom = 9,//initial zoom level
         basemap = gray,//basemap on load
-        layerName = "'ARC FY 2017'",
-        layerUrl = ["data/arc_topojson.json"],
-        layerGeomType = "polygon",
-        layerFileType = "topojson",
-        layerColor = "white",
-        layerFillColor = "cornflowerblue",
-        csvUrl = '',
-        //csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
-        dropbox = false,
+        layerName = "ARC FY 2017",//this does nothing, need to figure out how to get this into the layer control
+        layerUrl = ["data/arc_topojson.json"],//the geometry layer
+        layerGeomType = "polygon",//geometry type
+        layerFileType = "topojson",//filetype ie csv, geojson, topojson
+        layerColor = "white",//outside color
+        layerFillColor = "cornflowerblue",//fill color
+        //csvUrl = '',
+        csvUrl = '39yehyefev6qtai/county-economic-status-fy2017.csv',
+        dropbox = true,
         joinId = 'FIPS';
       /////////////////////////////
       //----STOP EDITING---------//
@@ -157,7 +157,7 @@
         joinedLayer.addTo(map);
         map.fitBounds(joinedLayer.getBounds());
         var overlays = {
-          "'" + layerName + "'": joinedLayer,
+          layer: joinedLayer,
         };
         var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
       });
