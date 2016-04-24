@@ -132,6 +132,12 @@
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
         };
         layer.bindPopup(popup).openPopup();
+      };
+
+      function updatePopup(feaure, layer) {
+        layer.on({
+          click: buildPopup
+        });
         layer.on('popupopen', function() {
           layer.setStyle({
             weight: 5,
@@ -144,12 +150,6 @@
             weight: 3,
             color: 'white',
           });
-        });
-      };
-
-      function updatePopup(feaure, layer) {
-        layer.on({
-          click: buildPopup
         });
       };
 
