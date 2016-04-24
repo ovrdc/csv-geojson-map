@@ -20,9 +20,6 @@
   <!--Papa Parse CSV plugin-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
 
-  <!--account.js-->
-  <script src="js/accounting.js"></script>
-
   <!--End Map CSS and JS-->
 </head>
 <style>
@@ -54,7 +51,7 @@
   <div id="map">
     <script>
       var start = performance.now()
-        //gloabl variables
+      //gloabl variables
       var osm, ortho, topo, gray, csv, omnivoreLayer, joinedLayer;
 
       //Basemaps all served over ssl
@@ -89,11 +86,11 @@
       /////////////////////////////
       //----EDIT THIS SECTION----//
       /////////////////////////////
-      var center = [39.0021, -83.0099],
+      var center = [39.0021, -83.0099],//map zooms to bounds of layer, but uses a center to start
         zoom = 9, //initial zoom level
         basemap = gray, //basemap on load
         layerName = "ARC FY 2017", //this does nothing, need to figure out how to get this into the layer control
-        layerUrl = ["data/arc_topojson.json"], //the geometry layer
+        layerUrl = ["data/arc_topojson.json"], //the geometry layer relative to this page
         layerGeomType = "polygon", //geometry type
         layerFileType = "topojson", //filetype ie csv, geojson, topojson
         layerColor = "white", //outside color
@@ -146,30 +143,22 @@
         layer.bringToFront();
       };
 
-      function updatePopup(feaure, layer) {
+      function showPopup(feaure, layer) {
         layer.on({
           click: buildPopup
         });
-        /*layer.on('popupopen', function() {
-          layer.setStyle({
-            weight: 5,
-            color: 'goldenrod',
-            opacity: 1,
-          });
-        });
-        layer.on('popupclose', function() {
-          layer.setStyle(style);
-        });*/
       };
 
       joinedLayer = L.geoJson(null, {
         style: style,
-        onEachFeature: updatePopup
+        onEachFeature: showPopup
       }).addTo(map);
 
       var overlays = {"layer": joinedLayer};
 
       var layerControl = new L.control.layers(baseLayers, overlays).addTo(map);
+
+      //function from gis stack exchange user
 
       function joinFunction(fProps, csvTable, joinKey) {
         var keyVal = fProps[joinKey];
@@ -187,7 +176,9 @@
       }
 
       if (join === true) {
-        //Change dropbox url - this is not officially supported in the free version of dropbox
+
+        //Change dropbox url - this is not officially supported in the free version of dropbox but it works to get around CORS
+
         if (dropbox === true) {
           csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
         } else {
@@ -216,7 +207,6 @@
             download: true,
             header: true,
             complete: function(results) {
-                //New join function from stack exchange
                 joinedLayer.eachLayer(function(layer) {
                   joinFunction(layer.feature.properties, results.data, joinId);
                 });
