@@ -161,17 +161,17 @@
 
                       //Function from an awesome person on stack exchange. Look up the CSV data for a row having the same joinId as the layer
                       geoJoinIdString = geoJoinId.toString();
-                      var props = layer.feature.properties;
+                      var props = feature.properties;
 
                       csvData = results.data.filter(function(data) {
                         return data.joinId == this;
                       }, geoJoinId);
 
-                      for (var k in layer.feature.properties) {
-                        var v = String(layer.feature.properties[k]);
+                      for (var k in feature.properties) {
+                        var v = String(feature.properties[k]);
                         popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
                       };
-                      
+
                       layer.bindPopup(popup);
                       layer.on('popupopen', function() {
                         layer.setStyle({
@@ -190,6 +190,28 @@
                   }) //end eachLayer
               } //Papa.parse's complete: section over
           }); // Papa.parse function over.
+        } else {
+          joinedLayer.eachLayer(function(layer) {
+            for (var k in feature.properties) {
+              var v = String(feature.properties[k]);
+              popup += '<strong>' + k + '</strong>: <span style="float:right;">' + v + '</span><br /><br />';
+            };
+
+            layer.bindPopup(popup);
+            layer.on('popupopen', function() {
+              layer.setStyle({
+                weight: 5,
+                color: 'goldenrod',
+                opacity: 1,
+              });
+            });
+            layer.on('popupclose', function() {
+              layer.setStyle({
+                weight: 3,
+                color: 'white',
+              })
+            })
+          }); //end eachLayer
         }
         joinedLayer.addTo(map);
         map.fitBounds(joinedLayer.getBounds());
