@@ -129,7 +129,7 @@
       popup = "";
       for (var k in layer.feature.properties) {
         var v = String(layer.feature.properties[k]);
-        popup += '<strong>' + k + '</strong><br>' + v + '<br /><br />';
+        popup += '<strong>' + k + '</strong>: ' + v + '<br />';
       };
       layer.bindPopup(popup);
     };
