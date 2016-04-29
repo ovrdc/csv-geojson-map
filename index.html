@@ -50,7 +50,7 @@
 <body>
   <div id="map">
     <script>
-      var start = performance.now()
+      var start = Date.now()
       //gloabl variables
       var osm, ortho, topo, gray, csv, omnivoreLayer, joinedLayer;
 
@@ -210,7 +210,7 @@
                 joinedLayer.eachLayer(function(layer) {
                   joinFunction(layer.feature.properties, results.data, joinId);
                 });
-                var now = performance.now();
+                var now = Date.now();
                 csvjoined = now - start;
                 console.log('csv loaded in ' + csvjoined);
               } //end complete
