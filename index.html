@@ -206,9 +206,6 @@
             download: true,
             header: true,
             complete: function(results) {
-                if (!results) {
-                  alert('There was a problem loading the csv file.')
-                }
                 //console.log(results);
                 joinedLayer.eachLayer(function(layer) {
                   joinFunction(layer.feature.properties, results.data, joinId);
@@ -218,7 +215,7 @@
                 console.log('csv loaded in ' + csvjoined);
               },
               error: function() {
-                alert('error')
+                alert('There was an error loading the csv file. Check your file path.')
               }//end complete
           }); //end prase
         } //end if
