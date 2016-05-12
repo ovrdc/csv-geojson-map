@@ -178,7 +178,6 @@
       if (join === true) {
 
         //Change dropbox url - this is not officially supported in the free version of dropbox but it works to get around CORS
-
         if (dropbox === true) {
           csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
         } else {
@@ -207,6 +206,7 @@
             download: true,
             header: true,
             complete: function(results) {
+                console.log(results);
                 joinedLayer.eachLayer(function(layer) {
                   joinFunction(layer.feature.properties, results.data, joinId);
                 });
