@@ -201,7 +201,7 @@
           } else {
             csv = csvUrl
           }
-          //console.log(csv);
+          console.log(csv);
           Papa.parse(csv, {
             download: true,
             header: true,
@@ -209,7 +209,7 @@
                 if (!results) {
                   alert('There was a problem loading the csv file.')
                 }
-                console.log(results);
+                //console.log(results);
                 joinedLayer.eachLayer(function(layer) {
                   joinFunction(layer.feature.properties, results.data, joinId);
                 });
