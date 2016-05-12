@@ -175,33 +175,33 @@
         }
       }
 
-      if (join === true) {
+      //Add geometry layer based on file type and extension
+      if (layerFileType === 'csv') {
+        omnivoreLayer = omnivore.csv(layerUrl[0], null, joinedLayer);
+      }
+      if (layerFileType === 'topojson') {
+        omnivoreLayer = omnivore.topojson(layerUrl[0], null, joinedLayer);
+      }
+      if (layerFileType === 'wkt') {
+        omnivoreLayer = omnivore.wkt(layerUrl[0], null, joinedLayer);
+      }
+      if (layerFileType === 'geojson') {
+        omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
+      }
 
-        //Change dropbox url - this is not officially supported in the free version of dropbox but it works to get around CORS
-        if (dropbox === true) {
-          csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
-        } else {
-          csv = csvUrl
-        }
+      omnivoreLayer.on('ready', function() {
 
-        //Add geometry layer based on file type and extension
-        if (layerFileType === 'csv') {
-          omnivoreLayer = omnivore.csv(layerUrl[0], null, joinedLayer);
-        }
-        if (layerFileType === 'topojson') {
-          omnivoreLayer = omnivore.topojson(layerUrl[0], null, joinedLayer);
-        }
-        if (layerFileType === 'wkt') {
-          omnivoreLayer = omnivore.wkt(layerUrl[0], null, joinedLayer);
-        }
-        if (layerFileType === 'geojson') {
-          omnivoreLayer = omnivore.geojson(layerUrl[0], null, joinedLayer);
-        }
+        map.fitBounds(joinedLayer.getBounds());
 
-        omnivoreLayer.on('ready', function() {
-
-          map.fitBounds(joinedLayer.getBounds());
-
+        if (join === true) {
+          console.log('joining csv = true');
+          //Change dropbox url - this is not officially supported in the free version of dropbox but it works to get around CORS
+          if (dropbox === true) {
+            csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
+          } else {
+            csv = csvUrl
+          }
+          console.log(csv);
           Papa.parse(csv, {
             download: true,
             header: true,
@@ -215,8 +215,8 @@
                 console.log('csv loaded in ' + csvjoined);
               } //end complete
           }); //end prase
-        }); //end on ready
-      } //end if
+        } //end if
+      }); //end on ready
     </script>
 </body>
 <footer>
