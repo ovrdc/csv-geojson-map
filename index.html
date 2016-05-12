@@ -82,8 +82,6 @@
         "Grayscale": gray,
       };
 
-//https://www.dropbox.com/s/bh9agjs6vhqfrip/county-economic-status-fy2017.csv?dl=0
-
       /////////////////////////////
       //----EDIT THIS SECTION----//
       /////////////////////////////
@@ -98,7 +96,7 @@
         layerFillColor = "cornflowerblue", //fill color
         join = true,
         //csvUrl = '',
-        csvUrl = 'bh9agjs6vhqfrip/county-economic-status-fy2017.csv',
+        csvUrl = 'bh9agjs6vhqfrip/county-economic-status-fy20178.csv',
         dropbox = true,
         joinId = 'FIPS';
       /////////////////////////////
@@ -196,17 +194,21 @@
 
         if (join === true) {
           console.log('joining csv = true');
+
           //Change dropbox url - this is not officially supported in the free version of dropbox but it works to get around CORS
           if (dropbox === true) {
             csv = 'https://dl.dropboxusercontent.com/s/' + csvUrl;
           } else {
             csv = csvUrl
           }
-          console.log(csv);
+          //console.log(csv);
           Papa.parse(csv, {
             download: true,
             header: true,
             complete: function(results) {
+                if (!results) {
+                  alert('There was a problem loading the csv file.')
+                }
                 console.log(results);
                 joinedLayer.eachLayer(function(layer) {
                   joinFunction(layer.feature.properties, results.data, joinId);
