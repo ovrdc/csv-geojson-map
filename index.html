@@ -134,6 +134,9 @@
           .setContent(popup)
           .setLatLng(popupCenter)
           .openOn(map);
+        layerPopup.on('popupclose', function() {
+          joinedLayer.setStyle(style)
+        });
         layer.setStyle({
           weight: 5,
           color: 'goldenrod',
@@ -152,10 +155,6 @@
         style: style,
         onEachFeature: showPopup
       }).addTo(map);
-
-      joinedLayer.on('popupclose', function() {
-        joinedLayer.setStyle(style)
-      });
 
       var overlays = {"layer": joinedLayer};
 
