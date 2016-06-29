@@ -88,13 +88,12 @@
       var center = [39.0021, -83.0099],//map zooms to bounds of layer, but uses a center to start
         zoom = 7, //initial zoom level
         basemap = gray, //basemap on load
-        layerName = "ARC FY 2017", //this does nothing, need to figure out how to get this into the layer control
+        layerName = "Appalachian Counties", //Name for the layer control
         layerUrl = ["data/arc_topojson.json"], //the geometry layer relative to this page
         layerGeomType = "polygon", //geometry type
         layerFileType = "topojson", //filetype ie csv, geojson, topojson
         layerColor = "white", //outside color
         layerFillColor = "cornflowerblue", //fill color
-        layerName = "Appalachian Counties",
         join = true,
         //csvUrl = '',
         csvUrl = 'bh9agjs6vhqfrip/county-economic-status-fy2017.csv',
@@ -118,7 +117,7 @@
         fillColor: layerFillColor,
       };
 
-      var popup;
+      var popup = "";
 
       function buildPopup(e) {
         var layer = e.target;
@@ -126,7 +125,6 @@
         var popupCenter = e.latlng;
         //console.log(popupCenter);
         //console.log(layer);
-        popup = "";
         for (var k in layer.feature.properties) {
           var v = String(layer.feature.properties[k]);
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
