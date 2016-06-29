@@ -117,25 +117,29 @@
         fillColor: layerFillColor,
       };
 
-      var popup = "";
-
+      var popup;
+      
       function buildPopup(e) {
-        var layer = e.target;
-        joinedLayer.setStyle(style);
-        var popupCenter = e.latlng;
+        popup = ""; //clear popup text
+        var layer = e.target; //shorthand for later
+        joinedLayer.setStyle(style); //reset the county style if it was not already
         //console.log(popupCenter);
         //console.log(layer);
+        //build the popup text from all the fields in the joined county layer
         for (var k in layer.feature.properties) {
           var v = String(layer.feature.properties[k]);
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
         };
+        //fix geojson popup to always align more towards the center of the polygon
+        var popupCenter = e.latlng;
         var layerPopup = new L.popup({}, joinedLayer)
           .setContent(popup)
           .setLatLng(popupCenter)
           .openOn(map);
         map.on('popupclose', function() {
-          joinedLayer.setStyle(style)
+          joinedLayer.setStyle(style) //reset polygon style after popup is closed
         });
+        //highlight the current feature and bring it in front of other features
         layer.setStyle({
           weight: 5,
           color: 'goldenrod',
