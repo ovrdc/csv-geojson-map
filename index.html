@@ -153,6 +153,10 @@
         onEachFeature: showPopup
       }).addTo(map);
 
+      joinedLayer.on('popupclose', function() {
+        koinedLayer.setStyle(style)
+      });
+
       var overlays = {"layer": joinedLayer};
 
       var layerControl = new L.control.layers(baseLayers, overlays).addTo(map);
