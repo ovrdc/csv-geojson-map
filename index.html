@@ -130,11 +130,11 @@
           var v = String(layer.feature.properties[k]);
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
         };
-        var layerPopup = new L.popup()
+        var layerPopup = new L.popup({}, joinedLayer)
           .setContent(popup)
           .setLatLng(popupCenter)
           .openOn(map);
-        layerPopup.on('popupclose', function() {
+        joinedLayer.on('popupclose', function() {
           joinedLayer.setStyle(style)
         });
         layer.setStyle({
