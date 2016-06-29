@@ -157,10 +157,10 @@
         onEachFeature: showPopup
       }).addTo(map);
 
-      var overlays = {layerName: joinedLayer};
+//      var overlays = {layerName: joinedLayer};
 
-      var layerControl = new L.control.layers(baseLayers, overlays).addTo(map);
-
+      var layerControl = new L.control.layers(baseLayers).addTo(map);
+      layerControl.addOverlay(joinedLayer, layerName);
       //function from gis stack exchange user
 
       function joinFunction(fProps, csvTable, joinKey) {
