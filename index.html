@@ -120,7 +120,6 @@
       var popup = "";
 
       function buildPopup(e) {
-        var layerPopup = [];
         var layer = e.target;
         joinedLayer.setStyle(style);
         var popupCenter = e.latlng;
@@ -130,11 +129,11 @@
           var v = String(layer.feature.properties[k]);
           popup += '<strong>' + k + '</strong>: ' + v + '<br />';
         };
-        layerPopup = new L.popup({}, joinedLayer)
+        var layerPopup = new L.popup({}, joinedLayer)
           .setContent(popup)
           .setLatLng(popupCenter)
           .openOn(map);
-        joinedLayer.on('popupclose', function() {
+        map.on('popupclose', function() {
           joinedLayer.setStyle(style)
         });
         layer.setStyle({
