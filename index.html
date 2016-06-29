@@ -94,6 +94,7 @@
         layerFileType = "topojson", //filetype ie csv, geojson, topojson
         layerColor = "white", //outside color
         layerFillColor = "cornflowerblue", //fill color
+        layerName = "Appalachian Counties",
         join = true,
         //csvUrl = '',
         csvUrl = 'bh9agjs6vhqfrip/county-economic-status-fy2017.csv',
@@ -156,7 +157,7 @@
         onEachFeature: showPopup
       }).addTo(map);
 
-      var overlays = {"layer": joinedLayer};
+      var overlays = {layerName: joinedLayer};
 
       var layerControl = new L.control.layers(baseLayers, overlays).addTo(map);
 
